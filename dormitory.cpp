@@ -56,11 +56,12 @@ void dormitory::on_pushButton_clicked()
     qDebug() << end1;
 
     QSqlTableModel *model = new QSqlTableModel; // 摘抄自帮助文档
-    model->setTable("student");
-    model->setFilter("id = " + ui->id->text());
-    model->setFilter("date between "+ start1 + "and" + end1);
-    qDebug() << model->lastError();
+    model->setTable("history");
+    model->setFilter( "date > "+ start1 + " and " + " date < " + end1 + " and " + " id = " + ui->id->text());
+    qDebug() << "date > "+ start1 + " and " + " date < " + end1 + " and " + " id = " + ui->id->text();
+
     model->select();
+    qDebug() << model->lastError();
     ui->tableView->setModel(model);
     ui->tableView->show();
 

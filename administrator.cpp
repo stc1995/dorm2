@@ -245,3 +245,155 @@ void administrator::on_pushButton_5_clicked()  //右下查询
 
 }
 
+
+void administrator::on_pushButton_4_clicked()
+{
+    QString file_full, file_name, file_path;
+    QFileInfo fi;
+    file_full = QFileDialog::getOpenFileName(this);
+    fi = QFileInfo(file_full);
+    file_name = fi.fileName();
+    file_path = fi.absolutePath();
+    qDebug() << file_path+"/"+file_name;
+
+    //读取csv数据到数据表
+    QFile file(file_path+"/"+file_name); //打开csv文件
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+     {
+        qDebug() << "cvs failure!";
+//          std::cerr << "Cannot open file for reading: "
+//                    << qPrintable(file.errorString()) << std::endl;
+     }
+    else{
+        qDebug() << "cvs ok!";
+    }
+
+    //将csv_utf8转为数据库中的表District保存
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("123.207.165.95");
+    db.setPort(3306);
+    db.setDatabaseName("abc");
+    db.setUserName("root");
+    db.setPassword("IOTkeshe2016");
+
+    if(!db.open())
+    {
+        QMessageBox::critical(0 , "Can not open database",
+                              "Unable to establish a database connection.",QMessageBox::Cancel);
+        qDebug() << "db failure!";
+//        std::cerr<<"stop!";
+    }
+    else{
+        qDebug() << "db ok!";
+    }
+
+    QStringList list;
+    list.clear();
+    QTextStream in(&file);  //QTextStream读取数据
+
+    QSqlQuery query;  //默认打开
+//    query.exec("select * from abc.student where id = 66666");
+
+//    while(query.next()){
+//        QString str = query.value(0).toString() ;
+//        for(int i = 1 ; i < 12; i++){
+//            str.append(",").append(query.value(i).toString());
+//        }
+//        qDebug() << str;
+//    }
+
+    while(!in.atEnd())
+    {
+       QString fileLine = in.readLine();  //从第一行读取至下一行
+       list = fileLine.split(",");  // , QString::SkipEmptyParts
+       qDebug() << list;
+
+       query.prepare("INSERT INTO student (id,name,password,building,room,idcard,college,class,sex,date,time,admin)"
+                     " VALUES (:id,:name,:password,:building,:room,:idcard,:college,:class,:sex,:date,:time,:admin)"); //准备执行SQL查询
+       query.bindValue(":id", list.at(0));   //绑定要插入的值
+       query.bindValue(":name", list.at(1));
+       query.bindValue(":password", list.at(2));
+       query.bindValue(":building", list.at(3).toInt());
+       query.bindValue(":room", list.at(4).toInt());
+       query.bindValue(":idcard", list.at(5));
+       query.bindValue(":college", list.at(6));
+       query.bindValue(":class", list.at(7));
+       query.bindValue(":sex", list.at(8).toInt());
+       query.bindValue(":admin", list.at(9));
+
+       query.exec();
+       db.commit();
+       qDebug() << query.lastError();
+    }
+
+}
+
+void administrator::on_pushButton_6_clicked()
+{
+    QString file_full, file_name, file_path;
+    QFileInfo fi;
+    file_full = QFileDialog::getOpenFileName(this);
+    fi = QFileInfo(file_full);
+    file_name = fi.fileName();
+    file_path = fi.absolutePath();
+    qDebug() << file_path+"/"+file_name;
+
+    //读取csv数据到数据表
+    QFile file(file_path+"/"+file_name); //打开csv文件
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+     {
+        qDebug() << "cvs failure!";
+//          std::cerr << "Cannot open file for reading: "
+//                    << qPrintable(file.errorString()) << std::endl;
+     }
+    else{
+        qDebug() << "cvs ok!";
+    }
+
+    //将csv_utf8转为数据库中的表District保存
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("123.207.165.95");
+    db.setPort(3306);
+    db.setDatabaseName("abc");
+    db.setUserName("root");
+    db.setPassword("IOTkeshe2016");
+
+    if(!db.open())
+    {
+        QMessageBox::critical(0 , "Can not open database",
+                              "Unable to establish a database connection.",QMessageBox::Cancel);
+        qDebug() << "db failure!";
+//        std::cerr<<"stop!";
+    }
+    else{
+        qDebug() << "db ok!";
+    }
+
+    QStringList list;
+    list.clear();
+    QTextStream in(&file);  //QTextStream读取数据
+
+    QSqlQuery query;  //默认打开
+//    query.exec("select * from abc.student where id = 66666");
+
+//    while(query.next()){
+//        QString str = query.value(0).toString() ;
+//        for(int i = 1 ; i < 12; i++){
+//            str.append(",").append(query.value(i).toString());
+//        }
+//        qDebug() << str;
+//    }
+
+    while(!in.atEnd())
+    {
+       QString fileLine = in.readLine();  //从第一行读取至下一行
+       list = fileLine.split(",");  // , QString::SkipEmptyParts
+       qDebug() << list;
+
+       query.prepare("DELETE FROM abc.student WHERE id = " + list.at(0)); //准备执行SQL查询
+
+       query.exec();
+       db.commit();
+       qDebug() << query.lastError();
+    }
+}

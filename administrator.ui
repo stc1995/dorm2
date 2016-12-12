@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>导入excel</string>
+     <string>导入cvs</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_15">
@@ -63,7 +63,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>导入excel</string>
+     <string>导入cvs</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">

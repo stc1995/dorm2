@@ -2,6 +2,9 @@
 #define ADMINISTRATOR_H
 
 #include <QMainWindow>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QSqlQuery>
 
 namespace Ui {
 class administrator;
@@ -29,6 +32,10 @@ private slots:
     void on_pushButton_5_clicked();
 
     void on_comboBox_8_currentTextChanged(const QString &arg1);
+
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_6_clicked();
 
 private:
     Ui::administrator *ui;
