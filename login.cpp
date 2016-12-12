@@ -13,6 +13,7 @@ login::login(QWidget *parent) :
 {
     ui->setupUi(this);
     MySqlInit();
+    ui->password->setEchoMode(QLineEdit::Password);
 }
 
 login::~login()
